@@ -1097,7 +1097,6 @@ else()
     # For Mac, we need to build a .bundle for the unity plugin.
     if(APPLE)
       set_target_properties(dracodec_unity PROPERTIES BUNDLE true)
-      set_target_properties(dracoenc_unity PROPERTIES BUNDLE true)
     endif()
   endif()
 
