@@ -16,6 +16,7 @@
 
 #include <limits>
 #include <memory>
+#include <iostream>
 
 #include "draco/attributes/geometry_indices.h"
 #include "draco/mesh/corner_table_iterators.h"
@@ -81,11 +82,14 @@ bool CornerTable::Reset(int num_faces, int num_vertices) {
 }
 
 bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
+  std::cout << "ComputeOppositeCorners" << std::endl;
   DRACO_DCHECK(GetValenceCache().IsCacheEmpty());
+  std::cout << "ComputeOppositeCorners1" << std::endl;
   if (num_vertices == nullptr) {
     return false;
   }
   opposite_corners_.resize(num_corners(), kInvalidCornerIndex);
+  std::cout << "ComputeOppositeCorners2" << std::endl;
 
   // Out implementation for finding opposite corners is based on keeping track
   // of outgoing half-edges for each vertex of the mesh. Half-edges (defined by
@@ -108,6 +112,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
     // to its vertex.
     num_corners_on_vertices[v1.value()]++;
   }
+  std::cout << "ComputeOppositeCorners3" << std::endl;
 
   // Create a storage for half-edges on each vertex. We store all half-edges in
   // one array, where each entry is identified by the half-edge's sink vertex id
@@ -133,6 +138,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
     vertex_offset[i] = offset;
     offset += num_corners_on_vertices[i];
   }
+  std::cout << "ComputeOppositeCorners4" << std::endl;
 
   // Now go over the all half-edges (using their opposite corners) and either
   // insert them to the |vertex_edge| array or connect them with existing
@@ -205,6 +211,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
       opposite_corners_[opposite_c] = c;
     }
   }
+  std::cout << "ComputeOppositeCorners5" << std::endl;
   *num_vertices = static_cast<int>(num_corners_on_vertices.size());
   return true;
 }
