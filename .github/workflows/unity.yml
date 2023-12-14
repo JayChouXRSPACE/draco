@@ -55,64 +55,58 @@ jobs:
     - name: build_mac
       run: cmake --build build_mac --config MinSizeRel --target draco_unity
 
-    - name: configure iOS
-      run: >
-        cmake . -G Xcode -B build_ios
-        -DCMAKE_BUILD_TYPE=MinSizeRel
-        -DCMAKE_SYSTEM_NAME=iOS
-        -DCMAKE_OSX_ARCHITECTURES=armv7\;armv7s\;arm64
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.0
-        -DDRACO_UNITY_PLUGIN=ON
-        -DDRACO_GLTF_BITSTREAM=ON
-        -DDRACO_BACKWARDS_COMPATIBILITY=OFF
-    - name: build iOS
-      run: cmake --build build_ios --config MinSizeRel --target draco_unity
-    - name: build iOS Simulator
-      run: >
-        cmake
-        --build build_ios
-        --config MinSizeRel
-        --target draco_unity
-        -- 
-        -sdk iphonesimulator
-        -arch "arm64"
-        -arch "x86_64"
-        EXECUTABLE_SUFFIX=-simulator.a
-        ONLY_ACTIVE_ARCH=NO
+    # - name: configure iOS
+    #   run: >
+    #     cmake . -G Xcode -B build_ios
+    #     -DCMAKE_BUILD_TYPE=MinSizeRel
+    #     -DCMAKE_SYSTEM_NAME=iOS
+    #     -DCMAKE_OSX_ARCHITECTURES=armv7\;armv7s\;arm64
+    #     -DCMAKE_OSX_DEPLOYMENT_TARGET=10.0
+    #     -DDRACO_UNITY_PLUGIN=ON
+    #     -DDRACO_GLTF_BITSTREAM=ON
+    #     -DDRACO_BACKWARDS_COMPATIBILITY=OFF
+    # - name: build iOS
+    #   run: cmake --build build_ios --config MinSizeRel --target draco_unity
+    # - name: build iOS Simulator
+    #   run: >
+    #     cmake
+    #     --build build_ios
+    #     --config MinSizeRel
+    #     --target draco_unity
+    #     -- 
+    #     -sdk iphonesimulator
+    #     -arch "arm64"
+    #     -arch "x86_64"
+    #     EXECUTABLE_SUFFIX=-simulator.a
+    #     ONLY_ACTIVE_ARCH=NO
 
-    - name: configure tvOS
-      run: >
-        cmake . -G Xcode -B build_tvos
-        -DCMAKE_BUILD_TYPE=MinSizeRel
-        -DCMAKE_SYSTEM_NAME=tvOS
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.0
-        -DDRACO_UNITY_PLUGIN=ON
-        -DDRACO_GLTF_BITSTREAM=ON
-        -DDRACO_BACKWARDS_COMPATIBILITY=OFF
-    - name: build tvOS
-      run: cmake --build build_tvos --config MinSizeRel --target draco_unity
-    - name: build tvOS Simulator
-      run: >
-        cmake
-        --build build_tvos
-        --config MinSizeRel
-        --target draco_unity
-        --
-        -sdk appletvsimulator
-        EXECUTABLE_SUFFIX=-simulator.a
-        ONLY_ACTIVE_ARCH=NO
+    # - name: configure tvOS
+    #   run: >
+    #     cmake . -G Xcode -B build_tvos
+    #     -DCMAKE_BUILD_TYPE=MinSizeRel
+    #     -DCMAKE_SYSTEM_NAME=tvOS
+    #     -DCMAKE_OSX_DEPLOYMENT_TARGET=10.0
+    #     -DDRACO_UNITY_PLUGIN=ON
+    #     -DDRACO_GLTF_BITSTREAM=ON
+    #     -DDRACO_BACKWARDS_COMPATIBILITY=OFF
+    # - name: build tvOS
+    #   run: cmake --build build_tvos --config MinSizeRel --target draco_unity
+    # - name: build tvOS Simulator
+    #   run: >
+    #     cmake
+    #     --build build_tvos
+    #     --config MinSizeRel
+    #     --target draco_unity
+    #     --
+    #     -sdk appletvsimulator
+    #     EXECUTABLE_SUFFIX=-simulator.a
+    #     ONLY_ACTIVE_ARCH=NO
 
     - name: package Apple
       run: |
         mkdir draco_apple
         mkdir draco_apple/x86_64
         mv build_mac/draco_unity.bundle draco_apple/x86_64
-        mkdir -p draco_apple/iOS
-        mv build_ios/MinSizeRel-iphoneos/libdraco_unity.a draco_apple/iOS
-        mv build_ios/MinSizeRel-iphonesimulator/libdraco_unity-simulator.a draco_apple/iOS
-        mkdir -p draco_apple/tvOS
-        mv build_tvos/MinSizeRel-appletvos/libdraco_unity.a draco_apple/tvOS
-        mv build_tvos/MinSizeRel-appletvsimulator/libdraco_unity-simulator.a draco_apple/tvOS
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
