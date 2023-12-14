@@ -138,7 +138,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
     vertex_offset[i] = offset;
     offset += num_corners_on_vertices[i];
   }
-  std::cout << "ComputeOppositeCorners4" << std::endl;
+  std::cout << "ComputeOppositeCorners4: num_corners():" << num_corners() << std::endl;
 
   // Now go over the all half-edges (using their opposite corners) and either
   // insert them to the |vertex_edge| array or connect them with existing
@@ -149,7 +149,9 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
     const VertexIndex sink_v = Vertex(Previous(c));
 
     const FaceIndex face_index = Face(c);
+    std::cout << "ComputeOppositeCorners4-1" << std::endl;
     if (c == FirstCorner(face_index)) {
+      std::cout << "ComputeOppositeCorners4-1-1" << std::endl;
       // Check whether the face is degenerated, if so ignore it.
       const VertexIndex v0 = Vertex(c);
       if (v0 == source_v || v0 == sink_v || source_v == sink_v) {
@@ -157,6 +159,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
         c += 2;  // Ignore the next two corners of the same face.
         continue;
       }
+      std::cout << "ComputeOppositeCorners4-1-2" << std::endl;
     }
 
     CornerIndex opposite_c(kInvalidCornerIndex);
@@ -164,8 +167,10 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
     const int num_corners_on_vert = num_corners_on_vertices[sink_v.value()];
     // Where to look for the first half-edge on the sink vertex.
     offset = vertex_offset[sink_v.value()];
+    std::cout << "ComputeOppositeCorners4-2" << std::endl;
     for (int i = 0; i < num_corners_on_vert; ++i, ++offset) {
       const VertexIndex other_v = vertex_edges[offset].sink_vert;
+    std::cout << "ComputeOppositeCorners4-2-1" << std::endl;
       if (other_v == kInvalidVertexIndex) {
         break;  // No matching half-edge found on the sink vertex.
       }
@@ -192,6 +197,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
         break;
       }
     }
+    std::cout << "ComputeOppositeCorners4-2-2" << std::endl;
     if (opposite_c == kInvalidCornerIndex) {
       // No opposite corner found. Insert the new edge
       const int num_corners_on_source_vert =
@@ -210,6 +216,7 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
       opposite_corners_[c] = opposite_c;
       opposite_corners_[opposite_c] = c;
     }
+    std::cout << "ComputeOppositeCorners4-2-3" << std::endl;
   }
   std::cout << "ComputeOppositeCorners5" << std::endl;
   *num_vertices = static_cast<int>(num_corners_on_vertices.size());
