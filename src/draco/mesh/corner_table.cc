@@ -197,12 +197,13 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
         break;
       }
     }
-    std::cout << "ComputeOppositeCorners4-2-2" << std::endl;
+    std::cout << "ComputeOppositeCorners4-2-2 opposite_c: " << opposite_c << ", kInvalidCornerIndex:" << kInvalidCornerIndex << std::endl;
     if (opposite_c == kInvalidCornerIndex) {
       // No opposite corner found. Insert the new edge
       const int num_corners_on_source_vert =
           num_corners_on_vertices[source_v.value()];
       offset = vertex_offset[source_v.value()];
+      std::cout << "ComputeOppositeCorners4-2-2-1 offset:" << offset << std::endl;
       for (int i = 0; i < num_corners_on_source_vert; ++i, ++offset) {
         // Find the first unused half-edge slot on the source vertex.
         if (vertex_edges[offset].sink_vert == kInvalidVertexIndex) {
@@ -211,10 +212,13 @@ bool CornerTable::ComputeOppositeCorners(int *num_vertices) {
           break;
         }
       }
+      std::cout << "ComputeOppositeCorners4-2-2-2" << std::endl;
     } else {
+      std::cout << "ComputeOppositeCorners4-2-----1" << std::endl;
       // Opposite corner found.
       opposite_corners_[c] = opposite_c;
       opposite_corners_[opposite_c] = c;
+      std::cout << "ComputeOppositeCorners4-2-----2" << std::endl;
     }
     std::cout << "ComputeOppositeCorners4-2-3" << std::endl;
   }
